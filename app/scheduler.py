@@ -10,18 +10,14 @@ def scheduled_fetch():
     print("schedular is working")
     db = SessionLocal()
 
-
-
     try:
         new_jobs = fetch_jobs(db)
         print("New Jobs Found: ", len(new_jobs))
-
         fetch_jobs(db)
     except Exception as e:
         print("Scheduled fetch failed: ", e)
     finally:
         db.close()
-
 
 scheduler.add_job(scheduled_fetch,"interval",seconds=10)
 

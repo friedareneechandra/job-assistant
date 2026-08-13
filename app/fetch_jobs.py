@@ -16,8 +16,8 @@ def fetch_jobs(db:Session):
     try:
         response = requests.get(url,timeout=30)
         raw_data = response.json() # now it is a list
-        if (response.status_code == 200):
-            print("Success")
+
+        if (response.status_code == 200): print("Success")
         else:
             print(response.status_code == 404,"error")
     except Exception as e:
@@ -27,7 +27,6 @@ def fetch_jobs(db:Session):
         try:
             remote_job_id = str(job["id"])
             job_exist = db.query(Job).filter(Job.remote_job_id == remote_job_id).first()
-            print(job_exist)
 
             if job_exist:
                 job_exist.company = job.get("company")
@@ -39,7 +38,7 @@ def fetch_jobs(db:Session):
                 job_exist.date = datetime.datetime.fromisoformat(job["date"])
                 job_exist.source = "RemoteOk"
 
-                print("update",job["id"])
+                # print("update",job["id"])
 
             else:
                 new_job = Job(
@@ -51,11 +50,12 @@ def fetch_jobs(db:Session):
                     tags=job["tags"],
                     date=datetime.datetime.fromisoformat(job["date"]),
                     source="RemoteOK",
-                    description=job["description"],)
+                    description=job["description"],
+                )
 
-            db.add(new_job)
-            new_jobs.append(new_job)
-            print("Inserted: ", remote_job_id)
+                db.add(new_job)
+                new_jobs.append(new_job)
+                print("Inserted: ")
 
         except Exception as e:
             print("Error processing job: ",e)

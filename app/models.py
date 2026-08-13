@@ -19,7 +19,7 @@ class Job(Base):
     position = Column(String,nullable=False)
     location = Column(String)
     tags = Column(ARRAY(String))
-    apply_url = Column(String(100),nullable=False)
+    apply_url = Column(Text,nullable=False)
     date = Column(DateTime,nullable=False)
     source = Column(String, nullable=False)
     description = Column(Text, nullable=False)

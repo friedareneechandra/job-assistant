@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from app.jobs import router as jobs_router
 from app.profile import router as profile_router
+from app.matching import router as recommendation_router
 from contextlib import asynccontextmanager
 from app.scheduler import starts_scheduler,stop_scheduler
 
@@ -15,7 +16,7 @@ async def lifespan(app:FastAPI):
 app = FastAPI(lifespan=lifespan)
 app.include_router(jobs_router)
 app.include_router(profile_router)
-
+app.include_router(recommendation_router)
 
 @app.get("/")
 def root():

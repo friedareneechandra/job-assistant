@@ -11,7 +11,7 @@ class Base(DeclarativeBase):
 
 print("Creating engine...")
 
-engine = create_engine("postgresql+psycopg://postgres:admin123@localhost:5432/job_finder",echo = True)
+engine = create_engine("postgresql+psycopg://postgres:admin123@localhost:5432/job_finder")
 
 
 SessionLocal = sessionmaker(autocommit=False,autoflush=False, bind=engine)

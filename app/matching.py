@@ -18,6 +18,7 @@ def get_jobs(db:Session):
 def get_profiles(profile_id,db):
     return db.query(UserProfile).filter(UserProfile.profile_id == profile_id).first()
 
+
 def matched_jobs(profile_id,db:Session):
     recommendations=[]
 
@@ -68,6 +69,42 @@ def matched_jobs(profile_id,db:Session):
     recommendations.sort(key=lambda recommendation: (recommendation["matched_percent"],recommendation["matched_count"],), reverse=True)
 
     return recommendations
+
+def match_skills(user_skills,job):
+    tags = job.tags or []
+    position = job.position or ""
+    description = job.description or ""
+    job_text = (" ".join(tags) + " " + position + " " + description).casefold()
+
+    user_skill_set = set()
+    for every_skill in user_skills:
+        user_skill_set.add(every_skill.skill.strip().casefold())
+
+    matched_skills = set()
+    for skill in user_skill_set:
+        if skill in job_text:
+            matched_skills.add(skill)
+
+    return matched_skills
+
+def find_matching_users(job,db:Session):
+    notify_recommendations =[]
+
+    users = db.query(UserProfile).all()
+
+    for each_user in users:
+        user_skills= get_skills(each_user.profile_id, db)
+        matched_skills = match_skills(user_skills,job)
+
+
+        if matched_skills:
+            notify_recommendations.append({
+                "profile_id": each_user.profile_id,
+                "matched_skills": sorted(matched_skills),
+            })
+
+    return notify_recommendations
+
 
 
 @router.get("/recommendations/{profile_id}", response_model=list[RecommendationResponse])

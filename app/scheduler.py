@@ -1,7 +1,8 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 from app.fetch_jobs import fetch_jobs
 from app.db import SessionLocal
-
+from app.matching import find_matching_users
+from app.notification import notify_user
 
 scheduler = BackgroundScheduler()
 
@@ -12,8 +13,12 @@ def scheduled_fetch():
 
     try:
         new_jobs = fetch_jobs(db)
+        for each_job in new_jobs:
+            matching_users = find_matching_users(each_job,db)
+            send_note= notify_user(each_job,matching_users,db)
+            print("Matching users:", matching_users)
+            print("Send email: ", send_note)
         print("New Jobs Found: ", len(new_jobs))
-        fetch_jobs(db)
     except Exception as e:
         print("Scheduled fetch failed: ", e)
     finally:

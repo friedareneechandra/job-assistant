@@ -62,8 +62,9 @@ def fetch_jobs(db:Session):
 
     try:
         db.commit()
-        return new_jobs
         print("Job fetched successfully.")
+        return new_jobs
+
     except Exception as e:
         db.rollback()
         print(e)

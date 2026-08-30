@@ -5,10 +5,6 @@ import uuid
 from app.db import engine,Base
 
 
-
-
-
-
 class Job(Base):
 
     __tablename__= "job_lists"
@@ -49,3 +45,12 @@ class Skill(Base):
 
 Base.metadata.create_all(engine)
 
+class Notification (Base):
+    __tablename__="notifications"
+    id = Column(UUID(as_uuid=True),primary_key=True, default=uuid.uuid4)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("profiles.profile_id"), nullable=False)
+    job_id = Column(UUID(as_uuid=True),ForeignKey("job_lists.id"),nullable=False)
+    sent_at = Column(DateTime,nullable=False)
+    status = Column(String(20), nullable=False)
+
+Base.metadata.create_all(engine)

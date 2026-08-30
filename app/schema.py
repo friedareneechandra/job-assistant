@@ -69,3 +69,13 @@ class RecommendationResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class NotificationResponse(BaseModel):
+    user_id : UUID
+    job_id: UUID
+    sent_at : datetime.datetime
+    status : str
+
+    class Config:
+        from_attributes = True

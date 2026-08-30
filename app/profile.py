@@ -4,12 +4,13 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.db import get_db
-from app.models import UserProfile, Skill
+from app.models import UserProfile, Skill,Notification
 from app.schema import (
     UserProfileCreate,
     UserProfileResponse,
     SkillCreate,
     SkillResponse,
+    NotificationResponse
 )
 
 router = APIRouter()
@@ -59,3 +60,9 @@ def get_user(profile_id: UUID,db: Session = Depends(get_db),):
         )
 
     return profile
+
+@router.get("/notifications/{user_id}", response_model=list[NotificationResponse])
+def get_notification(user_id:UUID,db:Session= Depends(get_db)):
+
+     notifications = db.query(Notification).filter(Notification.user_id == user_id).all()
+     return notifications

@@ -95,12 +95,19 @@ def find_matching_users(job,db:Session):
     for each_user in users:
         user_skills= get_skills(each_user.profile_id, db)
         matched_skills = match_skills(user_skills,job)
+        matched_count = len(matched_skills)
+        total_skill = len(user_skills)
 
+        if total_skill == 0:
+            continue
+
+        matched_percent = ( matched_count / total_skill ) * 100
 
         if matched_skills:
             notify_recommendations.append({
                 "profile_id": each_user.profile_id,
                 "matched_skills": sorted(matched_skills),
+                "matched_percent": round(matched_percent,2)
             })
 
     return notify_recommendations

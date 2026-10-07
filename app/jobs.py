@@ -2,7 +2,6 @@ from sqlalchemy import or_
 from app.db import get_db
 from app.models import *
 from app.schema import *
-from app.matching import matched_jobs
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException,Query
 

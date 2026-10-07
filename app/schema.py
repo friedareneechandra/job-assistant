@@ -23,10 +23,14 @@ print(JobResponse.model_fields)
 
 class UserProfileCreate(BaseModel):
     email: str
+    password: str
     preferred_location: str
     minimum_experience: int
     job_type: str
+    employment_type : str
     notification_enabled: bool
+    match_preference: str = "MEDIUM"
+
 
     class Config:
         from_attributes = True
@@ -54,6 +58,7 @@ class UserProfileResponse(BaseModel):
     job_type: str
     notification_enabled: bool
     skills: list[SkillResponse]
+    employment_type: str
 
     class Config:
         from_attributes = True
@@ -65,7 +70,11 @@ class RecommendationResponse(BaseModel):
     location: str | None
     matched_skills: list[str]
     matched_count: int
-    match_percent: float
+    matched_percent: float
+    experience_required: int | None
+    experience_fit: str
+    match_level: str
+
 
     class Config:
         from_attributes = True
@@ -79,3 +88,16 @@ class NotificationResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+class LoginRequest(BaseModel):
+    email:str
+    password:str
+
+    class Config:
+        from_attributes = True
+
+class TokenResponse(BaseModel):
+    access_token:str
+    token_type:str
+
+
